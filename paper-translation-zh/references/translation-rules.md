@@ -7,6 +7,8 @@
 - Keep the author's claims, uncertainty, limitations, and causal language intact.
 - Avoid adding explanations that are not in the source unless clearly labeled as translator notes.
 - Do not summarize when the user asked for full translation.
+- Translate the full paper paragraph by paragraph. Do not replace sections, experiments, tables, or conclusions with summaries unless the user explicitly requests a summary.
+- Default to a complete Chinese Markdown manuscript, using the original section order and heading hierarchy.
 
 ## Terminology
 
@@ -54,6 +56,9 @@ Examples:
 - Translate table headers, notes, and captions.
 - Keep numeric values, units, confidence intervals, and statistical notation unchanged.
 - Preserve figure/table numbering exactly.
+- Recreate simple tables as Markdown only when the extracted structure is reliable.
+- For complex or wide tables that risk column errors, preserve a cropped table image containing the table body and caption, then translate the caption and summarize the table's meaning nearby.
+- Do not use a whole-page screenshot for a table unless table-only cropping is not reliable; if a page screenshot is used, add a translator note.
 
 ## Translator notes
 

@@ -1,47 +1,69 @@
-# paper-translation-zh-skill
+# Paper Translation ZH
 
-本仓库提供一个名为 **Paper Translation ZH** 的翻译 Skill（技能/提示词包），用于将**英文英文科研论文**翻译为**忠实的中文学术文档**，并尽量**保留原论文结构与版式要素**（章节层级、图表、公式、编号、引用与参考文献等）。
+`paper-translation-zh` is a Codex skill for translating English academic papers into faithful Simplified Chinese Markdown manuscripts.
 
-> Skill 定义位于 `paper-translation-zh/SKILL.md`，相关参考规则在 `paper-translation-zh/references/`。
+It is designed for papers, arXiv preprints, journal articles, conference papers, theses, and technical reports where structure and layout matter.
 
-## 特性
+## Features
 
-- **忠实翻译优先**：尽量保持作者原意、措辞强度、假设/限制条件与不确定性表达。
-- **结构/版式保真**：保留标题、摘要、关键词、章节编号、图表/公式/脚注/附录与交叉引用。
-- **术语一致性**：建议先建立术语表，统一关键术语译法。
-- **交付物默认**：按 Skill 默认输出为 **中文 DOCX + 中文 Markdown**（需要对应的文件处理工具/能力支持）。
+- Translate full English papers into Chinese paragraph by paragraph.
+- Preserve the original paper structure: title, abstract, keywords, sections, subsections, acknowledgments, references, and appendices.
+- Keep formulas in LaTeX whenever possible.
+- Preserve figures and complex tables as cropped images containing the visual object plus its caption.
+- Place translated figures and tables near their corresponding source locations, not in a final appendix by default.
+- Preserve citation markers, variables, symbols, dataset names, model names, and bibliographic references.
+- Default output is Markdown saved next to the source paper as `*_中文翻译.md`.
+- Generate DOCX only when explicitly requested.
 
-## 目录结构
+## Usage
 
-- `paper-translation-zh/`
-  - `SKILL.md`：Skill 主定义（用途、工作流、默认输出、参考文件索引）。
-  - `agents/openai.yaml`：界面显示名与默认提示词（用于将此 Skill 暴露给 Agent/运行环境）。
-  - `references/`：翻译/排版相关的细化规则
-    - `translation-rules.md`：翻译风格、术语、公式变量、引用与参考文献规则
-    - `layout-preservation.md`：图表/公式/版式保真策略（PDF/DOCX/Markdown）
-    - `batch-translation.md`：长文分批翻译与合并流程
-    - `quality-checklist.md`：交付前质量检查清单
+Example prompt:
 
-## 使用方式（建议流程）
+```text
+Use $paper-translation-zh to translate this English paper into a faithful Chinese Markdown manuscript while preserving figures, cropped figure/table regions with captions, formulas, tables, and layout.
+```
 
-1. **准备输入**：提供论文 PDF 或源文档（或粘贴文本），并说明是否需要严格版式保真。
-2. **盘点原文**：识别页数、标题作者、摘要、章节结构、图表公式与编号（多栏 PDF 需先做版式检查）。
-3. **锁定输出模式**：默认产出 *中文 DOCX + 中文 Markdown*；若需双语对照请明确说明。
-4. **建立术语表**：对关键术语在首次出现处给出中文（必要时附英文括注），并保持全篇一致。
-5. **分节翻译**：按章节逐段翻译，必要时用简短“译者注”标记不可辨识/疑似 OCR 错误内容。
-6. **图表公式保留**：保留图表与公式编号/交叉引用；公式优先 LaTeX 表达。
-7. **交付前检查**：按 `references/quality-checklist.md` 做完整性、忠实性、中文质量与版式检查。
+Typical Chinese prompt:
 
-## 默认约定
+```text
+[$paper-translation-zh] 帮我把这篇英文论文完整翻译成中文，保存在同级目录下，保留公式、图片、表格和原文结构。
+```
 
-来自 `paper-translation-zh/SKILL.md` 的默认设置：
+## Output Rules
 
-- 输出语言：简体中文
-- 风格：忠实的中文学术写作
-- 交付物：DOCX + Markdown
-- 保留原始资产（图表等）：是
-- 参考文献：保持原始书目形式（除非用户要求转换格式）
+- Default deliverable: Markdown only.
+- Default filename: `*_中文翻译.md`.
+- Images: stored in a sibling image folder and linked from Markdown.
+- Figures/tables: crop the figure or table region plus caption; avoid whole-page screenshots.
+- Tables: recreate simple tables as Markdown only when structure is reliable; otherwise preserve cropped table images.
+- References: keep original English bibliographic entries unless the user asks for a translated bibliography.
 
-## 许可证
+## Skill Structure
 
-仓库当前未声明许可证（LICENSE）。如需开源发布，建议补充许可证文件。
+```text
+paper-translation-zh/
+├── SKILL.md
+├── agents/
+│   └── openai.yaml
+└── references/
+    ├── batch-translation.md
+    ├── layout-preservation.md
+    ├── quality-checklist.md
+    └── translation-rules.md
+```
+
+## Installation
+
+Copy the `paper-translation-zh` folder into your Codex skills directory:
+
+```text
+C:\Users\<YourUser>\.codex\skills\paper-translation-zh
+```
+
+Restart Codex after installation so the skill can be discovered.
+
+## Notes
+
+- This skill does not call external translation APIs by default.
+- It relies on Codex/model reasoning plus available PDF and document tooling.
+- For long papers, it uses a Part1 -> Part2 -> Part3 -> merged Markdown workflow.

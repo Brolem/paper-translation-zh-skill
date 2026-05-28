@@ -1,0 +1,4 @@
+interface:
+  display_name: "Paper Translation ZH"
+  short_description: "Translate academic papers into Chinese"
+  default_prompt: "Use $paper-translation-zh to translate this English paper into a faithful Chinese DOCX and Markdown version while preserving figures, formulas, tables, and layout."
